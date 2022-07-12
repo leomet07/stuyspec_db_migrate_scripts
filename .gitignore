@@ -1,0 +1,9 @@
+*.json
+
+
+__pycache__/
+
+.vscode/
+
+.env
+

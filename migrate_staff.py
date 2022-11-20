@@ -12,7 +12,7 @@ CONNECTION_STR = os.getenv("MONGODB_URI")
 client = pymongo.MongoClient(CONNECTION_STR)
 
 db = client.devdb
-staff_collection = db.staff
+staff_collection = db.staffs
 
 error_indexes = []
 staffs = []

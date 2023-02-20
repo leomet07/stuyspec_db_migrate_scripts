@@ -34,8 +34,9 @@ with open("articles.json", "r") as articles_file:
 
 print("Initial array length: ", len(articles))
 
+
 upload_array = []
-for i in tqdm(range(len(articles)) ):
+for i in tqdm(range(len(articles))):
 	article = articles[i]
 	
 	try:
@@ -106,7 +107,7 @@ for i in tqdm(range(len(articles)) ):
 		contributor_slugs = list(map(lambda j : j['slug'], j['contributors']))
 		contributor_ids = list(map(lambda slug : find_staff_by_slug(slug)["_id"], contributor_slugs))
 		
-		raw_section = str(j["section"]['permalink']).split("/")[1].lower()
+		raw_section = str(j["section"]['permalink']).split("/")[1].lower()	
 		corresponding_section_id = big_section_order.index(raw_section)
 		
 		to_append = {
@@ -123,6 +124,10 @@ for i in tqdm(range(len(articles)) ):
 				"contributors" : contributor_ids,
 				"created_at" : created_at
 		} 
+
+		if len(str(j["section"]['permalink']).split("/")) > 2: 
+			to_append["sub_section"] = str(j["section"]['permalink']).split("/")[2].lower()
+
 
 		raw_media = j['media']
 		cover_image_url = None
@@ -152,7 +157,8 @@ with open("error_articles.json", "w") as error_file:
 
 print("Upload array length: ", len(upload_array))
 
+with open("successful_articles.json", "w") as s_articles:
+	json.dump(upload_array, s_articles, default=str)
 
-# with open("successful_articles.json", "w") as s_articles:
-# 	json.dump(upload_array, s_articles)
+
 articles_collection.insert_many(upload_array)

@@ -4,6 +4,7 @@ load_dotenv()
 import pymongo
 import os 
 import json
+from tqdm import tqdm
 
 from datetime import datetime
 
@@ -22,12 +23,12 @@ with open("staff.json", "r") as staff_file:
 print("Initial array length: ", len(staffs))
 
 upload_array = []
-for i in range(len(staffs)):
+for i in tqdm(range(len(staffs))):
 	staff = staffs[i]
 	try:
 		name = str(staff["first_name"] + " "  + staff["last_name"]).strip()
 		
-		email = staff["email"]
+		email = str(staff["email"])
 
 		description =  staff["description"]
 		description = "" if not description else description
@@ -36,6 +37,16 @@ for i in range(len(staffs)):
 		created_at = datetime.fromisoformat(staff["created_at"])
 
 		# print(name, email + "|" +  str(description) + "|",  slug)
+		
+
+		attempted_found_staff = staff_collection.find_one({"email" : email})
+
+		if attempted_found_staff: # If the staff member already exists in the db, move to next
+			continue
+
+		# print(name, email,  slug)
+
+		
 		upload_array.append(
 			{
 				"name" : name,

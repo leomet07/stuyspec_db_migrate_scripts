@@ -30,3 +30,7 @@ for article in articles:
 		
 print(sub_sections_set)
 print("Num of sub_sections: " , len(sub_sections_set))
+
+with open("sub_sections.txt", "w") as file:
+	for sub_section in sub_sections_set:
+		file.write(sub_section + "\n")
